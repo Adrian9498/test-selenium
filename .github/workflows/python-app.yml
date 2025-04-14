@@ -1,4 +1,4 @@
-name: Python Test Suite
+name: Python Test Suite with Chrome
 
 on:
   push:
@@ -22,10 +22,18 @@ jobs:
       with:
         python-version: "3.10"
 
-    - name: Install system dependencies for Selenium
+    - name: Install Chrome
+      uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: "latest"  # o versión específica como "119.0.6045.105"
+
+    - name: Install ChromeDriver
       run: |
-        sudo apt-get update
-        sudo apt-get install -y chromium-browser chromium-chromedriver
+        CHROME_VERSION=$(google-chrome --version | cut -d ' ' -f 3 | cut -d '.' -f 1)
+        CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+        wget -q "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
+        unzip chromedriver_linux64.zip -d /usr/local/bin
+        rm chromedriver_linux64.zip
 
     - name: Install Python packages
       run: |
