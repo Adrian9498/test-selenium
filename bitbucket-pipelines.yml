@@ -17,6 +17,8 @@ pipelines:
             - pip install pytest-html
             - pip install selenium
             - pytest --html=reports/report.html test.py
+          artifacts:
+          - reports/**
           services:
             - chrome
 definitions:
